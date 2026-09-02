@@ -1,5 +1,5 @@
 from account import BankAccount
-from database import DataBase
+from data_base import DataBase
 from logger import TransactionLogger
 from exceptions import (
     AccountNotFoundError,

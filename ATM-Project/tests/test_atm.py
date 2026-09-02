@@ -2,7 +2,7 @@ import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 import pytest
-from database import DataBase
+from data_base import DataBase
 from logger import TransactionLogger
 from atm import ATM
 from utils import hash_pin
@@ -12,7 +12,7 @@ from utils import hash_pin
 def atm_with_one_account():
     db_path, ledger_path = "test_users.csv", "test_ledger.csv"
     db = DataBase(database=db_path)
-    db.add_account("321", "Ahraaf", hash_pin("6541"), 2000.0)
+    db.add_account("321", "Ahraaf", "6541", 2000.0)
     logger = TransactionLogger(ledger_path=ledger_path)
     atm = ATM(db, logger)
     yield atm

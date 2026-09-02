@@ -1,10 +1,28 @@
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-
+from data_base import DataBase
 import pytest
 from account import BankAccount
 from exceptions import InvalidAmountError, InsufficientFundsError
 
+@pytest.fixture
+def mock_db():
+    test_db_file = "test_bank.db"
+    db = DataBase(database=test_db_file)
+    insert_query = """
+    INSERT INTO account(account_number, name, balance, pin_hash, failed_attempts, is_locked)
+    VALUES (?, ?, ?, ?, ?, ?)
+    """
+    db.cursor.execute(insert_query,(321,"Ahraaf",2000.0,6541,0,0))
+    db.connection.commit()
+    yield db
+    if hasattr(db, 'connection'):
+        db.connection.close()
+    if os.path.exists(test_db_file):
+        try:
+            os.remove(test_db_file)
+        except PermissionError:
+            pass
 
 @pytest.fixture
 def fresh_account():
@@ -44,15 +62,12 @@ def test_pin_check():
     assert acc.pin_check("1234") is True
     assert acc.pin_check("0000") is False
 
-
-def test_from_row_roundtrip():
-    import pandas as pd
-    row = pd.Series(
-        {"name": "Ahraaf", "pin_hash": "abc123", "balance": 2000.0,
-         "failed_attempts": 0, "is_locked": False},
-        name="321",
-    )
+def test_from_row_roundtrip(mock_db):        # add mock_db as a parameter
+    mock_db.cursor.execute("SELECT * FROM account WHERE account_number = ?", (321, ))
+    row = mock_db.cursor.fetchone()
     acc = BankAccount.from_row(row)
     assert acc.account_number == "321"
     assert acc.owner == "Ahraaf"
     assert acc.balance == 2000.0
+
+

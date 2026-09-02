@@ -77,7 +77,7 @@ class BankAccount:
         return cls(
             owner=row["name"],
             balance=row["balance"],
-            account_number=row.name,  # index value = account_number
+            account_number=row["account_number"],  # index value = account_number
             pin_hash=row["pin_hash"],
             failed_attempts=row["failed_attempts"],
             is_locked=bool(row["is_locked"]),
