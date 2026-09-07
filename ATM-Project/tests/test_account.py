@@ -30,12 +30,12 @@ def fresh_account():
 
 
 def test_initial_balance(fresh_account):
-    assert fresh_account.get_balance() == "Account Balance: 1000.0"
+    assert fresh_account.get_balance() == 1000.0
 
 
 def test_increased_balance_after_deposit(fresh_account):
     fresh_account.add_amount(1000.0)
-    assert fresh_account.get_balance() == "Account Balance: 2000.0"
+    assert fresh_account.get_balance() == 2000.0
 
 
 def test_negative_deposit(fresh_account):
@@ -53,7 +53,7 @@ def test_greater_withdraw_amount(fresh_account):
 def test_withdraw_record(fresh_account):
     # Fresh account starts at 1000.0. Tax is 200 * 1.01 = 202.0. Remaining = 798.0
     fresh_account.withdraw(200.0)
-    assert fresh_account.get_balance() == "Account Balance: 798.0"
+    assert fresh_account.get_balance() == 798.0
 
 
 def test_pin_check():

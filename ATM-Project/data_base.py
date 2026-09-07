@@ -5,7 +5,7 @@ from utils import hash_pin
 class DataBase:
     def __init__(self,database="data/bank.db"):
         self.database_path = database
-        self.connection = sqlite3.connect(database)
+        self.connection = sqlite3.connect(database,check_same_thread=False)
         
         self.connection.row_factory = sqlite3.Row
         self.cursor = self.connection.cursor()
@@ -29,7 +29,7 @@ class DataBase:
             row = self.cursor.fetchone()
             if row is None:
                 raise AccountNotFoundError("Account number not in database.")
-            return row
+            return dict(row)
 
     def account_exist(self, account_number) -> bool:
         acc_num = str(account_number)

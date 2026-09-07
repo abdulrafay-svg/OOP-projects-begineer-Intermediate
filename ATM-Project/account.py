@@ -30,7 +30,7 @@ class BankAccount:
         return f"owner: {self.owner} "
 
     def get_balance(self):
-        return f"Account Balance: {self.__balance}"
+        return self.__balance
 
     def get_pin(self):
         return (self.__pin_hash)
@@ -54,9 +54,10 @@ class BankAccount:
         else:
             self.__balance -= total_cost
 
+
     def pin_check(self, pin):
         pin = str(pin)
-        pin_hash = hash_pin(raw_pin= pin)
+        pin_hash = hash_pin(raw_pin = pin)
         return pin_hash == self.get_pin()
 
     def register_failed_attempt(self, max_attempts: int = 3):
